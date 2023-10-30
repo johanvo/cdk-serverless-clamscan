@@ -521,12 +521,8 @@ export class ServerlessClamscan extends Construct {
         resources: [bucket.arnForObjects('*')],
         principals: [new AnyPrincipal()],
         conditions: {
-          StringEquals: {
-            's3:ExistingObjectTag/scan-status': [
-              'IN PROGRESS',
-              'INFECTED',
-              'ERROR',
-            ],
+          StringNotEquals: {
+            's3:ExistingObjectTag/scan-status': 'CLEAN',
           },
           ArnNotEquals: {
             'aws:PrincipalArn': [this._scanFunction.role.roleArn, scan_assumed_principal.arn],
